@@ -132,7 +132,7 @@ export default function GeneratorPanel() {
     setProgress(10);
     addToast('Video generation started.', 'success');
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
+    const apiUrl = '/api';
 
     try {
       const encodedImages = await Promise.all(images.map(toBase64));

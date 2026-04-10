@@ -87,16 +87,21 @@ A modern, professional AI Video Generator Web App built with **Next.js**, **Tail
    - Navigate to `http://localhost:3000`
 
 ### Backend server
-1. Copy `.env.local.example` to `.env.local` and set `PYTHON_AI_SERVER_URL` if needed.
-2. Start the Node backend:
-```bash
-npm run server
-```
-3. Start the local AI server in a separate terminal:
-```bash
-npm run ai-server
-```
-4. Frontend will connect to `http://localhost:5000` by default.
+The application now uses **Next.js API Routes** located in `src/app/api/`. These handle the proxying to the AI server automatically.
+
+**To run locally for development:**
+1. Start the local AI server (Terminal 1):
+   ```bash
+   venv\Scripts\activate
+   npm run ai-server
+   ```
+2. Start the frontend (Terminal 2):
+   ```bash
+   npm run dev
+   ```
+   The frontend will connect to `http://localhost:3000/api` and proxy requests to your AI server.
+
+*(Note: `server.js` is now legacy and no longer required for the application to function).*
 
 ### Local AI server
 This repo now supports a local Python AI server at `http://localhost:6000`.
