@@ -9,8 +9,17 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 .vercel
-uploads/
-outputs/
-dist/
-build/
+/uploads/
+/outputs/
+/input_images/
+/dist/
+/build/
 .DS_Store
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
