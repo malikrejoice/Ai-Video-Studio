@@ -7,6 +7,10 @@ Run this after installing AnimateDiff to ensure everything works.
 import os
 import sys
 import shlex
+from dotenv import load_dotenv
+
+# Load local environment variables from .env.local
+load_dotenv('.env.local')
 
 def test_animatediff_setup():
     print("Testing AnimateDiff setup...")
@@ -69,9 +73,9 @@ if __name__ == '__main__':
     success = test_animatediff_setup()
     if success:
         mode = "demo mode" if os.environ.get('DEMO_MODE') else "AnimateDiff"
-        print(f"\n✅ {mode} setup looks good!")
+        print(f"\n[OK] {mode} setup looks good!")
         print("You can now run the AI server with: python ai_server.py")
     else:
-        print("\n❌ Setup needs fixing.")
+        print("\n[ERROR] Setup needs fixing.")
         print("Please check the installation instructions in README.md")
     sys.exit(0 if success else 1)

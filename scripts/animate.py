@@ -4,6 +4,10 @@ import os
 import shlex
 import subprocess
 import sys
+from dotenv import load_dotenv
+
+# Load local environment variables from .env.local
+load_dotenv('.env.local')
 
 def find_animatediff_command():
     env_cmd = os.environ.get('ANIMATEDIFF_CMD')
@@ -17,6 +21,11 @@ def find_animatediff_command():
             return [sys.executable, candidate]
 
     for module_name in ['animatediff', 'animediff', 'AnimateDiff']:
+        # If the module exists as a subdirectory with scripts/animate.py, use that directly
+        local_script = os.path.join(os.path.dirname(os.path.dirname(__file__)), module_name, 'scripts', 'animate.py')
+        if os.path.isfile(local_script):
+            return [sys.executable, local_script]
+            
         if importlib.util.find_spec(module_name) is not None:
             return [sys.executable, '-m', module_name]
 

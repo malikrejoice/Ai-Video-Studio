@@ -7,6 +7,10 @@ import base64
 import re
 import sys
 import time
+from dotenv import load_dotenv
+
+# Load local environment variables from .env.local
+load_dotenv('.env.local')
 
 app = Flask(__name__)
 
