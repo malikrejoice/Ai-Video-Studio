@@ -26,7 +26,7 @@ export default function Dashboard() {
         className="mb-8"
       >
         <h1 className="text-4xl font-bold text-white mb-2">Dashboard</h1>
-        <p className="text-gray-400">Welcome back! Here's your video generation activity</p>
+        <p className="text-gray-400">Welcome back! Here&apos;s your video generation activity</p>
       </motion.div>
 
       {/* Stats Grid */}
