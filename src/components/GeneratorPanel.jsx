@@ -1,9 +1,18 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useVideoStore, useToast } from '@/lib/store';
-import { Upload, X, Play, Download, RotateCcw } from 'lucide-react';
+import {
+  Cpu,
+  Download,
+  Play,
+  RotateCcw,
+  Sparkles,
+  Upload,
+  Wand2,
+  X,
+} from 'lucide-react';
 
 const toBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -14,6 +23,12 @@ const toBase64 = (file) =>
   });
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const promptIdeas = [
+  'Luxury perfume campaign in a rain-soaked city alley, slow motion droplets, chrome reflections',
+  'Anime-style night drive through neon streets, dreamy camera drift, cinematic headlights',
+  'Editorial product film for a smartwatch, studio shadows, macro glints, premium pacing',
+];
 
 export default function GeneratorPanel() {
   const {
@@ -42,6 +57,7 @@ export default function GeneratorPanel() {
     generatedVideo,
     setGeneratedVideo,
     addProject,
+    backendHealth,
   } = useVideoStore();
 
   const { addToast } = useToast();
@@ -51,6 +67,12 @@ export default function GeneratorPanel() {
   const styleOptions = ['Cinematic', 'Anime', 'Realistic', '3D Render'];
   const durationOptions = ['5s', '10s', '15s'];
   const aspectRatios = ['16:9', '9:16', '1:1'];
+
+  const backendLabel = useMemo(() => {
+    if (backendHealth?.mode === 'demo') return 'Demo backend active';
+    if (backendHealth?.gpu?.available) return 'GPU backend connected';
+    return 'Backend status pending';
+  }, [backendHealth]);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -195,76 +217,115 @@ export default function GeneratorPanel() {
     }
   };
 
-  const handleRegenerate = () => {
-    handleGenerateClick();
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-800 p-6 lg:p-8">
-      {/* Header */}
+    <div className="min-h-screen px-6 py-6 lg:px-8 lg:py-8">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-6 grid gap-6 xl:grid-cols-[1.35fr_0.9fr]"
       >
-        <h1 className="text-4xl font-bold text-white mb-2">Create Video</h1>
-        <p className="text-gray-400">
-          Transform your ideas into stunning AI-generated videos
-        </p>
+        <div className="glass p-7 lg:p-8">
+          <div className="pill pill-warm">
+            <Wand2 className="h-4 w-4" />
+            Create video
+          </div>
+          <h1 className="mt-5 text-4xl font-bold text-[#1d2430]">Build something your friends will want to replay.</h1>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-[#5b6472]">
+            Start with a cinematic prompt, add references if you have them, then generate a clean preview without leaving the app.
+          </p>
+        </div>
+
+        <div className="glass-dark p-7 text-white">
+          <div className="pill pill-dark">
+            <Cpu className="h-4 w-4" />
+            {backendLabel}
+          </div>
+          <p className="mt-5 text-sm leading-7 text-white/75">
+            {backendHealth?.gpu?.available
+              ? backendHealth.gpu.reason
+              : backendHealth?.gpu?.reason || 'Checking generation backend'}
+          </p>
+          <div className="mt-6 rounded-[1.4rem] border border-white/10 bg-white/6 p-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-white/55">What changes later</p>
+            <p className="mt-2 text-sm leading-7 text-white/78">
+              Your public frontend link stays the same when you upgrade to a GPU host. Only the backend URL changes behind the scenes.
+            </p>
+          </div>
+        </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        {/* Main Panel */}
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
         <div className="xl:col-span-2 space-y-6">
-          {/* Prompt Input */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="glass-dark p-6"
+            transition={{ delay: 0.08 }}
+            className="glass p-6 lg:p-7"
           >
-            <label className="block text-sm font-semibold text-white mb-3">
-              Describe your video
-            </label>
+            <div className="flex items-center justify-between gap-3">
+              <label className="text-sm font-semibold text-[#1d2430]">
+                Describe the shot
+              </label>
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6f55]">
+                {prompt.trim().length} characters
+              </span>
+            </div>
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="E.g., A cinematic sunset over mountains with flying birds, ultra realistic, 4K quality"
-              className="w-full h-32 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 transition-all resize-none"
+              placeholder="A crisp fashion campaign film inside a glasshouse, slow camera glide, luxurious highlights, editorial feel"
+              className="mt-4 h-36 w-full resize-none rounded-[1.5rem] border border-[#1d2430]/8 bg-white/72 px-5 py-4 text-[#1d2430] outline-none transition-all placeholder:text-[#8b95a7] focus:border-[#ec6b2d]/45 focus:bg-white"
             />
-            <p className="text-xs text-gray-500 mt-2">
-              Be descriptive for better results (minimum 10 characters)
+            <p className="mt-3 text-sm text-[#6b7280]">
+              More detail usually means better motion, stronger lighting, and a more cinematic result.
             </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {promptIdeas.map((idea) => (
+                <button
+                  key={idea}
+                  onClick={() => setPrompt(idea)}
+                  className="rounded-full border border-[#1d2430]/8 bg-white/76 px-4 py-2 text-xs font-semibold text-[#364152] transition hover:border-[#ec6b2d]/25 hover:text-[#1d2430]"
+                >
+                  {idea.slice(0, 64)}...
+                </button>
+              ))}
+            </div>
           </motion.div>
 
-          {/* Image Upload */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="glass-dark p-6"
+            transition={{ delay: 0.15 }}
+            className="glass p-6 lg:p-7"
           >
-            <label className="block text-sm font-semibold text-white mb-3">
-              Upload Reference Images (Optional)
-            </label>
+            <div className="flex items-center justify-between gap-3">
+              <label className="text-sm font-semibold text-[#1d2430]">
+                Reference images
+              </label>
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6f55]">
+                Optional
+              </span>
+            </div>
             <div
               onClick={() => fileInputRef.current?.click()}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-              className={`border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer ${
+              className={`mt-4 rounded-[1.7rem] border-2 border-dashed p-10 text-center transition-all cursor-pointer ${
                 dragActive
-                  ? 'border-purple-500 bg-purple-500/10'
-                  : 'border-white/20 hover:border-purple-500/50'
+                  ? 'border-[#ec6b2d] bg-[#fff4ec]'
+                  : 'border-[#1d2430]/12 bg-white/68 hover:border-[#0e7c86]/35 hover:bg-white'
               }`}
             >
-              <Upload className="w-8 h-8 text-purple-400 mx-auto mb-2" />
-              <p className="text-white font-medium mb-1">
-                Drag & drop images here
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#fff3eb] text-[#ec6b2d]">
+                <Upload className="h-6 w-6" />
+              </div>
+              <p className="mt-4 text-base font-semibold text-[#1d2430]">
+                Drag references here or tap to upload
               </p>
-              <p className="text-gray-500 text-sm mb-3">
-                or click to browse (Max 5 images, up to 25MB each)
+              <p className="mt-2 text-sm text-[#6b7280]">
+                Up to 5 images. Great for mood, product framing, or character consistency.
               </p>
               <input
                 ref={fileInputRef}
@@ -280,29 +341,26 @@ export default function GeneratorPanel() {
               />
             </div>
 
-            {/* Image Previews */}
             {images.length > 0 && (
-              <div className="grid grid-cols-3 gap-3 mt-4 sm:grid-cols-4">
+              <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4">
                 {[...images].map((img, idx) => (
                   <motion.div
                     key={idx}
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    initial={{ opacity: 0, scale: 0.84 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="relative aspect-square rounded-lg bg-white/10 overflow-hidden group"
+                    className="group relative aspect-square overflow-hidden rounded-[1.2rem] border border-[#1d2430]/10 bg-white"
                   >
                     <img
                       src={URL.createObjectURL(img)}
                       alt={`Preview ${idx}`}
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
                     />
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      onClick={() =>
-                        setImages(images.filter((_, i) => i !== idx))
-                      }
-                      className="absolute top-1 right-1 w-6 h-6 bg-red-500/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      whileHover={{ scale: 1.08 }}
+                      onClick={() => setImages(images.filter((_, i) => i !== idx))}
+                      className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#1d2430]/75 text-white opacity-0 transition-opacity group-hover:opacity-100"
                     >
-                      <X className="w-4 h-4 text-white" />
+                      <X className="h-4 w-4" />
                     </motion.button>
                   </motion.div>
                 ))}
@@ -310,191 +368,186 @@ export default function GeneratorPanel() {
             )}
           </motion.div>
 
-          {/* Video Settings */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="glass-dark p-6 space-y-4"
+            transition={{ delay: 0.22 }}
+            className="glass p-6 lg:p-7"
           >
-            <h3 className="text-white font-semibold">Video Settings</h3>
-
-            {/* Duration */}
-            <div>
-              <label className="text-xs font-medium text-gray-400 block mb-3">
-                Duration
-              </label>
-              <div className="flex gap-2">
-                {durationOptions.map((dur) => (
-                  <motion.button
-                    key={dur}
-                    whileHover={{ scale: 1.05 }}
-                    onClick={() => setDuration(dur)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                      duration === dur
-                        ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white'
-                        : 'bg-white/5 text-gray-400 border border-white/10 hover:border-purple-500/50'
-                    }`}
-                  >
-                    {dur}
-                  </motion.button>
-                ))}
+            <div className="grid gap-6 md:grid-cols-3">
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6f55] block mb-3">
+                  Duration
+                </label>
+                <div className="flex gap-2">
+                  {durationOptions.map((dur) => (
+                    <motion.button
+                      key={dur}
+                      whileHover={{ scale: 1.03 }}
+                      onClick={() => setDuration(dur)}
+                      className={`rounded-full px-4 py-2 text-sm font-semibold transition-all ${
+                        duration === dur
+                          ? 'bg-[#1d2430] text-white'
+                          : 'border border-[#1d2430]/10 bg-white/72 text-[#5b6472]'
+                      }`}
+                    >
+                      {dur}
+                    </motion.button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Aspect Ratio */}
-            <div>
-              <label className="text-xs font-medium text-gray-400 block mb-3">
-                Aspect Ratio
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {aspectRatios.map((ratio) => (
-                  <motion.button
-                    key={ratio}
-                    whileHover={{ scale: 1.05 }}
-                    onClick={() => setAspectRatio(ratio)}
-                    className={`py-2 rounded-lg font-medium text-sm transition-all ${
-                      aspectRatio === ratio
-                        ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white'
-                        : 'bg-white/5 text-gray-400 border border-white/10 hover:border-purple-500/50'
-                    }`}
-                  >
-                    {ratio}
-                  </motion.button>
-                ))}
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6f55] block mb-3">
+                  Aspect ratio
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {aspectRatios.map((ratio) => (
+                    <motion.button
+                      key={ratio}
+                      whileHover={{ scale: 1.03 }}
+                      onClick={() => setAspectRatio(ratio)}
+                      className={`rounded-[1rem] py-2 text-sm font-semibold transition-all ${
+                        aspectRatio === ratio
+                          ? 'bg-[#ec6b2d] text-white'
+                          : 'border border-[#1d2430]/10 bg-white/72 text-[#5b6472]'
+                      }`}
+                    >
+                      {ratio}
+                    </motion.button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Style Presets */}
-            <div>
-              <label className="text-xs font-medium text-gray-400 block mb-3">
-                Style Preset
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                {styleOptions.map((s) => (
-                  <motion.button
-                    key={s}
-                    whileHover={{ scale: 1.05 }}
-                    onClick={() => setStyle(s)}
-                    className={`py-2 px-3 rounded-lg font-medium text-sm transition-all ${
-                      style === s
-                        ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white'
-                        : 'bg-white/5 text-gray-400 border border-white/10 hover:border-purple-500/50'
-                    }`}
-                  >
-                    {s}
-                  </motion.button>
-                ))}
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6f55] block mb-3">
+                  Style
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {styleOptions.map((s) => (
+                    <motion.button
+                      key={s}
+                      whileHover={{ scale: 1.03 }}
+                      onClick={() => setStyle(s)}
+                      className={`rounded-[1rem] px-3 py-2 text-sm font-semibold transition-all ${
+                        style === s
+                          ? 'bg-[#0e7c86] text-white'
+                          : 'border border-[#1d2430]/10 bg-white/72 text-[#5b6472]'
+                      }`}
+                    >
+                      {s}
+                    </motion.button>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Generate Button */}
           <motion.button
             onClick={handleGenerateClick}
             disabled={isGenerating || !prompt.trim()}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`w-full py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 transition-all ${
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            className={`flex w-full items-center justify-center gap-3 rounded-[1.5rem] py-4 text-lg font-bold transition-all ${
               isGenerating || !prompt.trim()
-                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white glow-accent hover:shadow-2xl'
+                ? 'cursor-not-allowed bg-[#d3d7de] text-[#7c8595]'
+                : 'bg-gradient-to-r from-[#ec6b2d] via-[#f0953a] to-[#0e7c86] text-white glow-accent'
             }`}
           >
             {isGenerating ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Generating...
+                <div className="h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                Generating your clip
               </>
             ) : (
               <>
-                <Play className="w-5 h-5" fill="white" />
-                Generate Video
+                <Play className="h-5 w-5" fill="white" />
+                Generate video
               </>
             )}
           </motion.button>
         </div>
 
-        {/* Output Panel */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="glass-dark p-6 sticky top-24 h-fit"
+          transition={{ delay: 0.28 }}
+          className="glass-dark sticky top-8 h-fit p-6 text-white"
         >
-          <h3 className="text-white font-semibold mb-4">Output</h3>
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-xl font-bold">Output preview</h3>
+            <div className="pill pill-dark">
+              <Sparkles className="h-4 w-4" />
+              {generationStatus === 'completed' ? 'Ready' : generationStatus}
+            </div>
+          </div>
 
           {errorMessage && (
-            <div className="rounded-3xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-100">
+            <div className="mt-4 rounded-[1.4rem] border border-rose-400/20 bg-rose-500/10 p-4 text-sm text-rose-100">
               {errorMessage}
             </div>
           )}
 
           {generatedVideo && videoUrl ? (
-            <div className="space-y-4">
-              <div className="rounded-3xl border border-white/10 bg-[#0a0e27] p-3">
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-400 mb-2">Status</p>
-                <p className="text-sm text-white font-medium">
-                  {generationStatus === 'completed' ? 'Completed' : generationStatus}
+            <div className="mt-5 space-y-4">
+              <div className="rounded-[1.6rem] border border-white/10 bg-white/6 p-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-white/55">Latest render</p>
+                <p className="mt-2 text-sm font-semibold text-white">{generatedVideo.title}</p>
+                <p className="mt-2 text-xs text-white/56">
+                  {generatedVideo.duration} • {generatedVideo.aspectRatio} • {generatedVideo.style}
                 </p>
                 {jobId && (
-                  <p className="text-xs text-gray-500 mt-1">Job ID: {jobId}</p>
+                  <p className="mt-2 text-xs text-white/45">Job ID: {jobId}</p>
                 )}
               </div>
-              <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#0a0e27]">
-                <video
-                  controls
-                  src={videoUrl}
-                  className="h-full w-full rounded-3xl bg-black"
-                />
-              </div>
 
-              <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                <p className="text-xs text-gray-400 mb-1">Generated Video</p>
-                <p className="text-sm text-white font-medium truncate">
-                  {generatedVideo.title}
-                </p>
-                <p className="text-xs text-gray-500 mt-2">
-                  {generatedVideo.duration} • {generatedVideo.aspectRatio}
-                </p>
+              <div className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-black">
+                <video controls src={videoUrl} className="h-full w-full bg-black" />
               </div>
 
               <motion.a
-                whileHover={{ scale: 1.03 }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 href={videoUrl}
                 download
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 py-2 text-white font-medium hover:shadow-lg transition-all"
+                className="flex w-full items-center justify-center gap-2 rounded-[1.1rem] bg-white px-4 py-3 font-semibold text-[#1d2430]"
               >
-                <Download className="w-4 h-4" />
-                Download
+                <Download className="h-4 w-4" />
+                Download render
               </motion.a>
 
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={handleGenerateClick}
                 disabled={isGenerating}
-                className="w-full py-2 bg-white/10 border border-white/20 text-white rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-white/20 transition-all disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-[1.1rem] border border-white/12 bg-white/8 px-4 py-3 font-semibold text-white disabled:opacity-50"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="h-4 w-4" />
                 Regenerate
               </motion.button>
             </div>
           ) : isGenerating ? (
-            <div className="rounded-3xl border border-white/10 bg-[#0a0e27] p-8 text-center text-muted">
-              <p className="text-sm text-white">Generating your video... Please wait.</p>
+            <div className="mt-5 rounded-[1.6rem] border border-white/10 bg-white/6 p-6">
+              <p className="text-sm font-medium text-white">Generating your video preview</p>
               <div className="mt-4 h-3 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 transition-all" style={{ width: `${progress}%` }} />
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#ec6b2d] to-[#0e7c86] transition-all"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
+              <p className="mt-3 text-xs uppercase tracking-[0.18em] text-white/50">
+                {progress}% complete
+              </p>
             </div>
           ) : (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-cyan-500/20 rounded-lg flex items-center justify-center mx-auto mb-3 border border-white/10">
-                <Play className="w-8 h-8 text-purple-400" />
+            <div className="mt-5 rounded-[1.8rem] border border-white/10 bg-white/6 p-8 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-[1.4rem] bg-white/10">
+                <Play className="h-8 w-8 text-white/82" />
               </div>
-              <p className="text-gray-400 text-sm">
-                Your generated video will appear here
+              <p className="mt-4 text-base font-semibold text-white">Your rendered clip will appear here.</p>
+              <p className="mt-2 text-sm leading-7 text-white/65">
+                Pick a style, describe the motion clearly, and you&apos;ll get a playback-ready preview in this panel.
               </p>
             </div>
           )}

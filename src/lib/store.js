@@ -32,6 +32,7 @@ export const useVideoStore = create((set) => ({
   videoUrl: null,
   errorMessage: '',
   generatedVideo: null,
+  backendHealth: null,
   projects: [
     { id: 1, title: 'Mountain Sunset', thumbnail: '🌄', date: '2 days ago' },
     { id: 2, title: 'Ocean Waves', thumbnail: '🌊', date: '1 week ago' },
@@ -49,6 +50,7 @@ export const useVideoStore = create((set) => ({
   setVideoUrl: (videoUrl) => set({ videoUrl }),
   setErrorMessage: (errorMessage) => set({ errorMessage }),
   setGeneratedVideo: (video) => set({ generatedVideo: video }),
+  setBackendHealth: (backendHealth) => set({ backendHealth }),
   addProject: (project) =>
     set((state) => ({
       projects: [{ ...project, id: Date.now() }, ...state.projects],

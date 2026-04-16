@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'AI Video Studio - Professional Video Generator',
-  description: 'Create stunning AI-generated videos with advanced features and beautiful UI',
+  title: 'MotionMint Studio',
+  description: 'Create cinematic AI videos from prompts and references with a polished studio workflow.',
 };
 
 export default function RootLayout({

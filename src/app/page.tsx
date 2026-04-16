@@ -36,18 +36,20 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-800">
+    <div className="flex h-screen studio-shell ambient-lines">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Navbar */}
-        <Navbar />
+      <div className="flex-1 flex flex-col overflow-hidden page-frame">
+        <div className="page-panel flex min-h-0 flex-1 flex-col overflow-hidden">
+          {/* Navbar */}
+          <Navbar />
 
-        {/* Page Content */}
-        <div className="flex-1 overflow-auto">
-          {renderPage()}
+          {/* Page Content */}
+          <div className="flex-1 overflow-auto">
+            {renderPage()}
+          </div>
         </div>
       </div>
 
