@@ -1,0 +1,8 @@
+.git
+.next
+node_modules
+venv
+outputs
+input_images
+__pycache__
+.vercel
