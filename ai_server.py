@@ -44,6 +44,20 @@ def get_generation_mode():
     return 'unconfigured'
 
 
+def get_gpu_status():
+    try:
+        import torch
+    except Exception:
+        return {'available': False, 'reason': 'PyTorch is not installed in this runtime.'}
+
+    try:
+        if torch.cuda.is_available():
+            return {'available': True, 'reason': torch.cuda.get_device_name(0)}
+        return {'available': False, 'reason': 'CUDA GPU is not available in this runtime.'}
+    except Exception as exc:
+        return {'available': False, 'reason': str(exc)}
+
+
 def animatediff_model_status():
     root = os.environ.get('ANIMATEDIFF_ROOT') or os.path.join(os.path.dirname(__file__), 'AnimateDiff')
     if not os.path.isdir(root):
@@ -59,11 +73,12 @@ def animatediff_model_status():
     )
 
     if dreambooth_ready and motion_ready:
-        return {'ready': True, 'reason': 'Model checkpoints detected.'}
+        return {'ready': True, 'downloadable': True, 'reason': 'Model checkpoints detected.'}
 
     return {
         'ready': False,
-        'reason': 'Missing AnimateDiff model checkpoints in models/DreamBooth_LoRA and/or models/Motion_Module.',
+        'downloadable': True,
+        'reason': 'Model checkpoints are not present locally. The official AnimateDiff code can auto-download the default public checkpoints when a real GPU host runs the job.',
     }
 
 
@@ -211,6 +226,7 @@ def serve_output(filename):
 def health():
     mode = get_generation_mode()
     model_status = animatediff_model_status() if mode == 'animatediff' else None
+    gpu_status = get_gpu_status()
     return jsonify(
         {
             'ok': True,
@@ -218,6 +234,7 @@ def health():
             'outputDir': OUTPUT_DIR,
             'mode': mode,
             'animatediff': model_status,
+            'gpu': gpu_status,
         }
     )
 

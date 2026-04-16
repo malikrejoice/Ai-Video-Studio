@@ -23,7 +23,7 @@ Real AnimateDiff requires all of the following:
 - Stable Diffusion checkpoint files
 - AnimateDiff motion module checkpoint files
 
-This repository includes the AnimateDiff code wrapper and config structure, but the actual model checkpoint files are not committed in `AnimateDiff/models/`.
+This repository includes the AnimateDiff code wrapper and config structure. The backend can now auto-download the default public motion module and backup DreamBooth checkpoint on a real host, but it still needs a GPU-capable runtime.
 
 ## Recommended Production Architecture
 
@@ -89,10 +89,10 @@ To run real generation, you need:
 
 1. a Linux GPU host
 2. the AnimateDiff repo dependencies installed
-3. model assets placed in:
+3. `DEMO_MODE` removed
+4. optional local model assets placed in:
    - `AnimateDiff/models/DreamBooth_LoRA/`
    - `AnimateDiff/models/Motion_Module/`
-4. `DEMO_MODE` removed
 
 The backend will then detect:
 
@@ -100,7 +100,11 @@ The backend will then detect:
 - or `ANIMATEDIFF_ROOT`
 - or the bundled `AnimateDiff/` directory
 
-The updated wrapper in `scripts/animate.py` now prepares a runtime AnimateDiff config file and converts generated GIF output into the app's expected output file.
+The updated wrapper in `scripts/animate.py` now:
+
+- prepares a runtime AnimateDiff config file
+- converts generated GIF output into the app's expected output file
+- falls back to default public checkpoint filenames so the official AnimateDiff code can auto-download them when missing
 
 ## Validate Assets Before Switching Off Demo Mode
 
@@ -110,7 +114,7 @@ Run:
 python scripts/check_animatediff_assets.py
 ```
 
-If this fails, do not disable demo mode yet.
+If this reports only warnings, the runtime can still bootstrap itself on a real GPU host with internet access.
 
 ## Example GPU Host Setup
 
@@ -125,7 +129,7 @@ pip install -r requirements.txt
 pip install -r AnimateDiff/requirements.txt
 ```
 
-Then place required model checkpoints into:
+Optional but recommended: place model checkpoints into:
 
 ```text
 AnimateDiff/models/DreamBooth_LoRA/
@@ -168,12 +172,13 @@ When AnimateDiff is selected, it also reports whether required model checkpoints
 
 `DEMO_MODE=1` is still enabled on the backend.
 
-### Health says `mode: animatediff` but not ready
+### Health says GPU is unavailable
 
-Model checkpoint files are still missing from:
+The current host cannot run the official AnimateDiff pipeline because it requires CUDA. Move the backend to a GPU host.
 
-- `AnimateDiff/models/DreamBooth_LoRA`
-- `AnimateDiff/models/Motion_Module`
+### Health says `mode: animatediff` and local models are missing
+
+That is acceptable if the host has outbound internet and can auto-download the default public checkpoints on first run.
 
 ### Generation fails immediately after turning demo off
 

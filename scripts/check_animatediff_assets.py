@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 
 load_dotenv('.env.local')
 
+DEFAULT_DREAMBOOTH_FILENAME = 'realisticVisionV60B1_v51VAE.safetensors'
+DEFAULT_MOTION_MODULE_FILENAME = 'v3_sd15_mm.ckpt'
+
 
 def find_first_file(directory, suffixes):
     if not directory.exists():
@@ -46,18 +49,24 @@ def main():
     )
 
     if not dreambooth_file:
-        print('ERROR: No Stable Diffusion / DreamBooth checkpoint found in models/DreamBooth_LoRA')
+        print(
+            'WARNING: No local DreamBooth checkpoint found in models/DreamBooth_LoRA. '
+            f'The runtime can attempt to auto-download {DEFAULT_DREAMBOOTH_FILENAME}.'
+        )
     else:
         print(f'Found DreamBooth checkpoint: {dreambooth_file.name}')
 
     if not motion_module_file:
-        print('ERROR: No motion module checkpoint found in models/Motion_Module')
+        print(
+            'WARNING: No local motion module checkpoint found in models/Motion_Module. '
+            f'The runtime can attempt to auto-download {DEFAULT_MOTION_MODULE_FILENAME}.'
+        )
     else:
         print(f'Found motion module checkpoint: {motion_module_file.name}')
 
     if not dreambooth_file or not motion_module_file:
-        print('AnimateDiff is not ready yet.')
-        return 1
+        print('Local assets are incomplete, but the runtime is configured with downloadable defaults.')
+        return 0
 
     print('AnimateDiff asset check passed.')
     return 0

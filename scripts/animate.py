@@ -20,6 +20,8 @@ DEFAULT_NEGATIVE_PROMPT = (
     "worst quality, low quality, blurry, distorted, deformed, disfigured, "
     "text, watermark, logo, cropped, duplicate, extra limbs, bad anatomy"
 )
+DEFAULT_DREAMBOOTH_FILENAME = 'realisticVisionV60B1_v51VAE.safetensors'
+DEFAULT_MOTION_MODULE_FILENAME = 'v3_sd15_mm.ckpt'
 
 
 def _resolve_animatediff_root(command):
@@ -51,12 +53,11 @@ def _find_model_paths(root):
         ['*.ckpt', '*.safetensors', '*.bin'],
     )
 
-    if not dreambooth_path or not motion_module_path:
-        raise EnvironmentError(
-            'AnimateDiff model checkpoints are missing. Add a Stable Diffusion model file to '
-            f'"{models_dir / "DreamBooth_LoRA"}" and a motion module checkpoint to '
-            f'"{models_dir / "Motion_Module"}".'
-        )
+    if not dreambooth_path:
+        dreambooth_path = models_dir / 'DreamBooth_LoRA' / DEFAULT_DREAMBOOTH_FILENAME
+
+    if not motion_module_path:
+        motion_module_path = models_dir / 'Motion_Module' / DEFAULT_MOTION_MODULE_FILENAME
 
     return dreambooth_path, motion_module_path
 
