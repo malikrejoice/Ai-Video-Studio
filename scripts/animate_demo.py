@@ -7,6 +7,7 @@ This creates a simple animated video from text without requiring the full Animat
 import argparse
 import os
 import random
+import sys
 import time
 from moviepy import TextClip, ColorClip, CompositeVideoClip
 

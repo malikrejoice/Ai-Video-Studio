@@ -25,6 +25,48 @@ jobs = {}
 job_lock = threading.Lock()
 
 
+def get_generation_mode():
+    if os.environ.get('DEMO_MODE', '').lower() in ('1', 'true', 'yes'):
+        return 'demo'
+
+    animatediff_root = os.environ.get('ANIMATEDIFF_ROOT')
+    if animatediff_root and os.path.isfile(os.path.join(animatediff_root, 'scripts', 'animate.py')):
+        return 'animatediff'
+
+    animatediff_cmd = os.environ.get('ANIMATEDIFF_CMD')
+    if animatediff_cmd:
+        return 'custom-command'
+
+    bundled_root = os.path.join(os.path.dirname(__file__), 'AnimateDiff')
+    if os.path.isfile(os.path.join(bundled_root, 'scripts', 'animate.py')):
+        return 'animatediff'
+
+    return 'unconfigured'
+
+
+def animatediff_model_status():
+    root = os.environ.get('ANIMATEDIFF_ROOT') or os.path.join(os.path.dirname(__file__), 'AnimateDiff')
+    if not os.path.isdir(root):
+        return {'ready': False, 'reason': 'AnimateDiff repository not found.'}
+
+    dreambooth_dir = os.path.join(root, 'models', 'DreamBooth_LoRA')
+    motion_dir = os.path.join(root, 'models', 'Motion_Module')
+    dreambooth_ready = os.path.isdir(dreambooth_dir) and any(
+        name.endswith(('.safetensors', '.ckpt', '.bin')) for name in os.listdir(dreambooth_dir)
+    )
+    motion_ready = os.path.isdir(motion_dir) and any(
+        name.endswith(('.safetensors', '.ckpt', '.bin')) for name in os.listdir(motion_dir)
+    )
+
+    if dreambooth_ready and motion_ready:
+        return {'ready': True, 'reason': 'Model checkpoints detected.'}
+
+    return {
+        'ready': False,
+        'reason': 'Missing AnimateDiff model checkpoints in models/DreamBooth_LoRA and/or models/Motion_Module.',
+    }
+
+
 def save_image(base64_string, index):
     match = IMAGE_REGEX.match(base64_string)
     if match:
@@ -167,7 +209,17 @@ def serve_output(filename):
 
 @app.route('/health', methods=['GET'])
 def health():
-    return jsonify({'ok': True, 'jobs': len(jobs), 'outputDir': OUTPUT_DIR})
+    mode = get_generation_mode()
+    model_status = animatediff_model_status() if mode == 'animatediff' else None
+    return jsonify(
+        {
+            'ok': True,
+            'jobs': len(jobs),
+            'outputDir': OUTPUT_DIR,
+            'mode': mode,
+            'animatediff': model_status,
+        }
+    )
 
 
 if __name__ == '__main__':
