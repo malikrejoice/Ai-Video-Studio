@@ -1,0 +1,21 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#162118"/>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <ellipse cx="620" cy="175" rx="245" ry="94" fill="#E8F7C7" fill-opacity="0.24"/>
+  <path d="M65 800L258 348L451 800H65Z" fill="#234C34"/>
+  <path d="M266 800L459 287L652 800H266Z" fill="#2E6341"/>
+  <path d="M520 800L713 253L906 800H520Z" fill="#39754D"/>
+  <path d="M785 800L960 337L1135 800H785Z" fill="#254F37"/>
+  <rect x="128" y="118" width="398" height="224" rx="28" fill="white" fill-opacity="0.12" stroke="white" stroke-opacity="0.26"/>
+  <text x="162" y="180" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">Forest Path</text>
+  <text x="162" y="230" fill="#E6F4D1" font-family="Arial, sans-serif" font-size="22">Atmospheric cinematic route</text>
+  <text x="162" y="278" fill="#CAE5BA" font-family="Arial, sans-serif" font-size="18">Morning haze • soft camera float • grounded tones</text>
+  <rect y="664" width="1200" height="136" fill="#121A15"/>
+  <defs>
+    <linearGradient id="bg" x1="600" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#485B3C"/>
+      <stop offset="0.48" stop-color="#274130"/>
+      <stop offset="1" stop-color="#15211B"/>
+    </linearGradient>
+  </defs>
+</svg>

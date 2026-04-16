@@ -34,9 +34,9 @@ export const useVideoStore = create((set) => ({
   generatedVideo: null,
   backendHealth: null,
   projects: [
-    { id: 1, title: 'Mountain Sunset', thumbnail: '🌄', date: '2 days ago' },
-    { id: 2, title: 'Ocean Waves', thumbnail: '🌊', date: '1 week ago' },
-    { id: 3, title: 'Forest Path', thumbnail: '🌲', date: '2 weeks ago' },
+    { id: 1, title: 'Mountain Sunset', thumbnail: '/gallery/sunset-studio.svg', date: '2 days ago' },
+    { id: 2, title: 'Ocean Waves', thumbnail: '/gallery/ocean-drive.svg', date: '1 week ago' },
+    { id: 3, title: 'Forest Path', thumbnail: '/gallery/forest-frame.svg', date: '2 weeks ago' },
   ],
   setPrompt: (prompt) => set({ prompt }),
   setImages: (images) => set({ images }),

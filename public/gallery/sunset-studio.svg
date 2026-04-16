@@ -1,0 +1,19 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#211C2B"/>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <circle cx="913" cy="178" r="118" fill="#FFD27E" fill-opacity="0.95"/>
+  <path d="M0 539C133 481 246 468 339 500C432 532 533 539 642 500C751 461 848 420 933 434C1018 448 1107 500 1200 567V800H0V539Z" fill="#1D2838"/>
+  <path d="M0 614C131 580 234 578 309 608C384 638 493 652 636 606C779 560 888 515 963 521C1038 527 1117 560 1200 620V800H0V614Z" fill="#0F7D87"/>
+  <path d="M0 690C180 653 351 649 513 678C675 707 847 706 1028 649C1101 626 1158 614 1200 615V800H0V690Z" fill="#F16831"/>
+  <rect x="105" y="116" width="358" height="210" rx="26" fill="white" fill-opacity="0.12" stroke="white" stroke-opacity="0.25"/>
+  <text x="138" y="176" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">Mountain Sunset</text>
+  <text x="138" y="226" fill="#F6E7CF" font-family="Arial, sans-serif" font-size="22">Editorial landscape loop</text>
+  <text x="138" y="271" fill="#FFDBA2" font-family="Arial, sans-serif" font-size="18">Slow pan • golden sky • travel mood</text>
+  <defs>
+    <linearGradient id="bg" x1="600" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5D3958"/>
+      <stop offset="0.45" stop-color="#40325D"/>
+      <stop offset="1" stop-color="#171E2B"/>
+    </linearGradient>
+  </defs>
+</svg>

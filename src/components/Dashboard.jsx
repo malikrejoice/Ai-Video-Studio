@@ -24,9 +24,9 @@ const quickStarts = [
 ];
 
 const orbitCards = [
-  { title: 'Launch Reel', caption: 'Chrome product frames', x: '12%', y: '14%' },
-  { title: 'Travel Story', caption: 'Kyoto rain sequence', x: '67%', y: '18%' },
-  { title: 'Fashion Clip', caption: 'Desert editorial motion', x: '21%', y: '68%' },
+  { title: 'Launch Reel', caption: 'Chrome product frames', x: '10%', y: '12%', image: '/gallery/ocean-drive.svg' },
+  { title: 'Travel Story', caption: 'Kyoto rain sequence', x: '66%', y: '14%', image: '/gallery/forest-frame.svg' },
+  { title: 'Fashion Clip', caption: 'Desert editorial motion', x: '19%', y: '66%', image: '/gallery/sunset-studio.svg' },
 ];
 
 function FloatingOrb({ className }) {
@@ -131,6 +131,13 @@ export default function Dashboard() {
               }}
               className="absolute hidden w-52 rounded-[1.6rem] border border-white/55 bg-white/72 p-4 shadow-[0_18px_38px_rgba(29,36,48,0.08)] md:block"
             >
+              <div className="mb-3 overflow-hidden rounded-[1rem] border border-white/50">
+                <img
+                  src={card.image}
+                  alt={card.title}
+                  className="h-28 w-full object-cover"
+                />
+              </div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6f55]">
                 Scene card
               </p>
@@ -294,7 +301,15 @@ export default function Dashboard() {
               >
                 <div className="flex items-center gap-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff3eb] text-xl">
-                    {video.thumbnail || '🎬'}
+                    {typeof video.thumbnail === 'string' && video.thumbnail.startsWith('/') ? (
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="h-full w-full rounded-2xl object-cover"
+                      />
+                    ) : (
+                      video.thumbnail || '🎬'
+                    )}
                   </div>
                   <div>
                     <p className="font-semibold text-[#1d2430]">{video.title}</p>

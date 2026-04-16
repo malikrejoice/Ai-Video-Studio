@@ -1,0 +1,19 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#071A27"/>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <path d="M0 431C170 450 289 432 356 377C423 322 529 297 674 334C819 371 935 451 1024 457C1113 463 1172 444 1200 431V800H0V431Z" fill="#0B4452"/>
+  <path d="M0 518C136 542 248 542 335 518C422 494 543 470 698 494C853 518 975 581 1064 593C1117 600 1162 598 1200 588V800H0V518Z" fill="#11859A"/>
+  <path d="M0 620C188 602 377 600 568 620C759 640 970 675 1200 649V800H0V620Z" fill="#B7F4FF"/>
+  <circle cx="231" cy="162" r="96" fill="#C7FAFF" fill-opacity="0.8"/>
+  <rect x="690" y="120" width="372" height="220" rx="28" fill="white" fill-opacity="0.12" stroke="white" stroke-opacity="0.28"/>
+  <text x="724" y="180" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">Ocean Waves</text>
+  <text x="724" y="230" fill="#DDFBFF" font-family="Arial, sans-serif" font-size="22">Motion study with cool gradients</text>
+  <text x="724" y="276" fill="#AEEEF9" font-family="Arial, sans-serif" font-size="18">Aerial drift • clean horizon • calm energy</text>
+  <defs>
+    <linearGradient id="bg" x1="600" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#133953"/>
+      <stop offset="0.5" stop-color="#0B2439"/>
+      <stop offset="1" stop-color="#071621"/>
+    </linearGradient>
+  </defs>
+</svg>
